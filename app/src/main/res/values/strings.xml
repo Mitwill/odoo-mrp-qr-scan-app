@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">MRP Mitwill Scan</string>
+    <string name="url_server">@string/server_url</string>
+    <string name="label_username_or_email">Username or email</string>
+    <string name="label_password">Password</string>
+    <string name="label_login">Login</string>
+    <string name="label_logout">Log out</string>
+    <string name="label_exit">Exit</string>
+    <string name="label_yes">Yes</string>
+    <string name="label_no">No</string>
+    <string name="label_done">Done</string>
+    <string name="label_order_number">Order Number</string>
+    <string name="label_order_status">Order Status</string>
+    <string name="label_success">Success</string>
+    <string name="label_success_order">Order Placed Successfully</string>
+    <string name="label_success_work_order_scan">Work Order Successfully Scanned</string>
+    <string name="label_show_more_details">Show More Details</string>
+    <string name="error_something_went_wrong">Oops! Something went wrong. Please try again after some time.</string>
+    <string name="error_invalid_username_or_password">Invalid Username or Password</string>
+    <string name="error_invalid_password">Invalid password</string>
+    <string name="error_provide_username">Provide username</string>
+    <string name="error_provide_password">Provide password</string>
+    <string name="error_invalid_url">Server not found</string>
+
+    <string name="database_name">@string/server_database_name</string>
+    <string name="please_wait">Please Wait</string>
+    <string name="nav_header_title">Customer name</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="menu_work_center">Work Center</string>
+    <string name="menu_qr_scan">QR Scan</string>
+    <string name="menu_log_out">Log out</string>
+    <string name="action_settings">Settings</string>
+    <string name="confirm_qr">Confirm QR</string>
+
+    <string name="you_are_online">You are online</string>
+    <string name="you_are_offline">You are Offline</string>
+    <string name="work_center">Work Center :</string>
+    <string name="work_order">Work Order :</string>
+    <string name="batch_order_id">Batch Order Id : BMO</string>
+    <string name="bmo_number">BMO Number : </string>
+    <string name="work_order_id">Work Order Id : WO</string>
+    <string name="scan_valid_qr_for_batch">Please scan valid QR code for Batch order</string>
+    <string name="scan_valid_qr_for_work">Please scan valid QR code for Work order</string>
+    <string name="scan_valid_qr">Please scan valid QR code</string>
+    <string name="version">Version : </string>
+    <string name="no_data">No data available \nSwipe down to load data</string>
+    <string name="click_to_start_scanning">Click on QR to start scanning</string>
+    <string name="check_connection">Please Check internet connection</string>
+    <string name="dialog_sure_to_log_out">Are you sure you want to log out?</string>
+    <string name="sure_to_close_app">Are you sure you want to close this application?</string>
+    <string name="mrp_order_confirmation">Mrp Order Confirmation</string>
+    <string name="done_quantity_help_text">If you leave this field blank then order will be done automatically and full quantity will be updated</string>
+    <string name="enter_quantities">Enter Quantities..</string>
+    <string name="quantity_validation"> Please enter lesser quantity value</string>
+    <string name="label_browse">Browse</string>
+</resources>

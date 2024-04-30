@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_tv_action"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/_5sdp"
+    android:padding="@dimen/_5sdp"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:text=""
+    android:background="@drawable/rounded_layout_red_background"
+    android:textColor="@color/colorWhite"
+    android:textSize="@dimen/_14sdp"
+    android:textStyle="bold" />
