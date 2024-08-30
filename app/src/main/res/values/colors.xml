@@ -18,4 +18,6 @@
     <color name="android_orange_dark">#FF8800</color>
     <color name="android_red">#FF4444</color>
 
+<!--    imagepicker_black-->
+    <color name="imagepicker_black">#000000</color>
 </resources>

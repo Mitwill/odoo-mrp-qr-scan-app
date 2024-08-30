@@ -15,7 +15,9 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -31,9 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -67,10 +66,6 @@ import com.mitwill.mrp.utils.Utils;
 import com.mitwill.mrp.utils.WorkOrderScanResult;
 import com.mitwill.mrp.views.QRScanActivity;
 import com.mitwill.mrp.views.SuccessOrderActivity;
-import com.nguyenhoanglam.imagepicker.helper.Constants;
-import com.nguyenhoanglam.imagepicker.model.Image;
-import com.nguyenhoanglam.imagepicker.model.ImagePickerConfig;
-import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePickerActivity;
 //import com.opensooq.supernova.gligar.GligarPicker;
 
 import org.json.JSONException;
@@ -101,6 +96,8 @@ public class SubContractorQRScanFragment extends Fragment implements View.OnClic
 
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 2;
     private static final int MY_PERMISSIONS_REQUEST_STORAGE = 3;
+    private static final int MY_PERMISSIONS_REQUEST_MEDIA = 4;
+    private static final int SELECT_IMAGE = 1889;
     private Boolean IS_FULL_QUANTITY;
     private Float DONE_QUANTITIES;
     private int multipleImageRequestCode = 100;
@@ -131,7 +128,7 @@ public class SubContractorQRScanFragment extends Fragment implements View.OnClic
 
     private ApiInterface apiInterface;
     private SharedPreferences sharedPreferences;
-    ActivityResultLauncher<Intent> launchSomeActivity;
+//    ActivityResultLauncher<Intent> launchSomeActivity;
     ArrayList<Image> imageListData = new ArrayList<>();
 
     private BarcodeCallback callback = new BarcodeCallback() {
@@ -185,58 +182,118 @@ public class SubContractorQRScanFragment extends Fragment implements View.OnClic
         apiInterface = APIClient.getClient().create(ApiInterface.class);
         sharedPreferences = getActivity().getSharedPreferences(Preference, MODE_PRIVATE);
         String userId = PreferenceUtils.getPreference(sharedPreferences, keyUserId);
-        launchSomeActivity = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        imageListData.clear();
-                        imageList.clear();
-                        if (data != null) {
-                            imageListData = data.getParcelableArrayListExtra(Constants.EXTRA_IMAGES);
-                            for (Image image : imageListData) {
-                                imageList.add(Utils.createCopyAndReturnRealPath(getActivity(),image.getUri()));
-                            }
-                            setRecyclerviewAdapter();
-                        }
-
-                    }
-                });
+//        launchSomeActivity = registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(),
+//                result -> {
+//                    if (result.getResultCode() == Activity.RESULT_OK) {
+//                        Intent data = result.getData();
+//                        imageListData.clear();
+//                        imageList.clear();
+//                        if (data != null) {
+//                            imageListData = data.getParcelableArrayListExtra(Constants.EXTRA_IMAGES);
+//                            for (Image image : imageListData) {
+//                                imageList.add(Utils.createCopyAndReturnRealPath(getActivity(),image.getUri()));
+//                            }
+//                            setRecyclerviewAdapter();
+//                        }
+//
+//                    }
+//                });
         return view;
     }
 
-    private void pickImageFromGallery() {
-        Intent  intent = new Intent(getActivity(), ImagePickerActivity.class);
-        intent.putExtra(Constants.EXTRA_CONFIG, getImagePickerConfig());
-        launchSomeActivity.launch(intent);
+//    private void pickImageFromGallery() {
+//        Intent  intent = new Intent(getActivity(), ImagePickerActivity.class);
+//        intent.putExtra(Constants.EXTRA_CONFIG, getImagePickerConfig());
+//        launchSomeActivity.launch(intent);
+//    }
+//
+//    private ImagePickerConfig getImagePickerConfig() {
+//        ImagePickerConfig imagePickerConfig = new ImagePickerConfig();
+//        imagePickerConfig.setFolderMode(false);
+//        imagePickerConfig.setMultipleMode(true);
+//        imagePickerConfig.setShowNumberIndicator(true);
+//        imagePickerConfig.setAlwaysShowDoneButton(false);
+//        imagePickerConfig.setCameraOnly(false);
+//        imagePickerConfig.setShowCamera(true);
+//        imagePickerConfig.setSelectedImages(imageListData);
+//        imagePickerConfig.setStatusBarColor("#0097A7");
+//        imagePickerConfig.setToolbarColor("#00BCD4");
+//        imagePickerConfig.setProgressIndicatorColor("#00BCD4");
+//        imagePickerConfig.setMaxSize(5);
+//        return imagePickerConfig;
+//
+//    }
+
+    private void openGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_IMAGE);
     }
 
-    private ImagePickerConfig getImagePickerConfig() {
-        ImagePickerConfig imagePickerConfig = new ImagePickerConfig();
-        imagePickerConfig.setFolderMode(false);
-        imagePickerConfig.setMultipleMode(true);
-        imagePickerConfig.setShowNumberIndicator(true);
-        imagePickerConfig.setAlwaysShowDoneButton(false);
-        imagePickerConfig.setCameraOnly(false);
-        imagePickerConfig.setShowCamera(true);
-        imagePickerConfig.setSelectedImages(imageListData);
-        imagePickerConfig.setStatusBarColor("#0097A7");
-        imagePickerConfig.setToolbarColor("#00BCD4");
-        imagePickerConfig.setProgressIndicatorColor("#00BCD4");
-        imagePickerConfig.setMaxSize(5);
-        return imagePickerConfig;
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("SUBCOntractor QR SCAN FRAGMENT", "onActivityResult:data " + data + "  requestCode:" + requestCode + "   resultCode:" + resultCode);
+        if(resultCode == Activity.RESULT_OK){
+//            Intent myData = data.getData();
+//            imageListData.clear();
+//            imageList.clear();
+//            if (myData != null) {
+//                imageListData = myData.getParcelableArrayListExtra(Constants.EXTRA_IMAGES);
+//                for (Image image : imageListData) {
+//                    imageList.add(Utils.createCopyAndReturnRealPath(QRScanActivity.this,image.getUri()));
+//                }
+//                setRecyclerviewAdapter();
+//            }
 
+            Uri myData = data.getData();
+            if(myData!=null){
+                imageList.add(Utils.createCopyAndReturnRealPath(getActivity(),myData));
+            }
+            setRecyclerviewAdapter();
+
+        }
     }
+
 
     void requestPermission() {
+        // if (ContextCompat.checkSelfPermission(getActivity(),
+        //         Manifest.permission.CAMERA)
+        //         != PackageManager.PERMISSION_GRANTED) {
+
+        //     ActivityCompat.requestPermissions(getActivity(),
+        //             new String[]{Manifest.permission.CAMERA},
+        //             MY_PERMISSIONS_REQUEST_CAMERA);
+        // }
+
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.READ_MEDIA_IMAGES)
+                != PackageManager.PERMISSION_GRANTED){
 
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.CAMERA},
-                    MY_PERMISSIONS_REQUEST_CAMERA);
-        } else {
+                    if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED) {
+
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]{Manifest.permission.CAMERA},
+                                MY_PERMISSIONS_REQUEST_CAMERA);
+                    }
+                    else{
+                        if (currentAPIVersion >= Build.VERSION_CODES.TIRAMISU){
+                            ActivityCompat.requestPermissions(getActivity(),
+                                    new String[] {  Manifest.permission.READ_MEDIA_IMAGES },
+                                    MY_PERMISSIONS_REQUEST_MEDIA);
+                        } else {
+                            ActivityCompat.requestPermissions(getActivity(),
+                                    new String[] {  Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                                    MY_PERMISSIONS_REQUEST_STORAGE);
+                        }
+                    }
+        }
+         else {
             isPermissionEnabled = true;
         }
     }
@@ -429,7 +486,8 @@ public class SubContractorQRScanFragment extends Fragment implements View.OnClic
         btnBrowse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pickImageFromGallery();
+                openGallery();
+//                pickImageFromGallery();
             }
         });
 

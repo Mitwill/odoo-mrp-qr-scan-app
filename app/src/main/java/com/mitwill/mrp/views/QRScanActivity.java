@@ -9,14 +9,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,10 +29,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -68,20 +64,14 @@ import com.mitwill.mrp.utils.PreferenceUtils;
 import com.mitwill.mrp.utils.ServiceCallInfoUtils;
 import com.mitwill.mrp.utils.Utils;
 import com.mitwill.mrp.utils.WorkOrderScanResult;
-import com.nguyenhoanglam.imagepicker.helper.Constants;
-import com.nguyenhoanglam.imagepicker.model.Image;
-import com.nguyenhoanglam.imagepicker.model.ImagePickerConfig;
-import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePickerActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -106,6 +96,9 @@ public class QRScanActivity extends BaseActivity implements ActionDialogClickLis
     private ActionDialogClickListener actionDialogClickListener;
     private static final String TAG = QRScanActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 2;
+    private static final int MY_PERMISSIONS_REQUEST_STORAGE = 3;
+    private static final int MY_PERMISSIONS_REQUEST_MEDIA = 4;
+    private static final int SELECT_IMAGE = 1889;
     private Float DONE_QUANTITIES;
     private Boolean IS_FULL_QUANTITY;
     private List<String> imageList;
@@ -149,7 +142,7 @@ public class QRScanActivity extends BaseActivity implements ActionDialogClickLis
     ProgressDialog progressDialog;
     BatchOrderScanResult batchOrderScanResult;
     private WorkOrderScanResult workOrderScanResult;
-    ActivityResultLauncher<Intent> launchSomeActivity;
+//    ActivityResultLauncher<Intent> launchSomeActivity;
     ArrayList<Image> imageListData = new ArrayList<>();
 
     private int QRType;
@@ -351,23 +344,23 @@ public class QRScanActivity extends BaseActivity implements ActionDialogClickLis
 
         requestPermission();
         initData();
-        launchSomeActivity = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        imageListData.clear();
-                        imageList.clear();
-                        if (data != null) {
-                            imageListData = data.getParcelableArrayListExtra(Constants.EXTRA_IMAGES);
-                            for (Image image : imageListData) {
-                                imageList.add(Utils.createCopyAndReturnRealPath(QRScanActivity.this,image.getUri()));
-                            }
-                            setRecyclerviewAdapter();
-                        }
-
-                    }
-                });
+//        launchSomeActivity = registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(),
+//                result -> {
+//                    if (result.getResultCode() == Activity.RESULT_OK) {
+//                        Intent data = result.getData();
+//                        imageListData.clear();
+//                        imageList.clear();
+//                        if (data != null) {
+//                            imageListData = data.getParcelableArrayListExtra(Constants.EXTRA_IMAGES);
+//                            for (Image image : imageListData) {
+//                                imageList.add(Utils.createCopyAndReturnRealPath(QRScanActivity.this,image.getUri()));
+//                            }
+//                            setRecyclerviewAdapter();
+//                        }
+//
+//                    }
+//                });
     }
 
     private void initData() {
@@ -387,29 +380,82 @@ public class QRScanActivity extends BaseActivity implements ActionDialogClickLis
         disableButton();
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult:data " + data + "  requestCode:" + requestCode + "   resultCode:" + resultCode);
+        if(resultCode == Activity.RESULT_OK){
+//            Intent myData = data.getData();
+//            imageListData.clear();
+//            imageList.clear();
+//            if (myData != null) {
+//                imageListData = myData.getParcelableArrayListExtra(Constants.EXTRA_IMAGES);
+//                for (Image image : imageListData) {
+//                    imageList.add(Utils.createCopyAndReturnRealPath(QRScanActivity.this,image.getUri()));
+//                }
+//                setRecyclerviewAdapter();
+//            }
+
+            Uri myData = data.getData();
+            if(myData!=null){
+                imageList.add(Utils.createCopyAndReturnRealPath(QRScanActivity.this,myData));
+            }
+            setRecyclerviewAdapter();
+
+        }
+    }
+
     void requestPermission() {
+
+        // if (ContextCompat.checkSelfPermission(this,
+        //         Manifest.permission.CAMERA)
+        //         != PackageManager.PERMISSION_GRANTED) {
+
+        //     if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+        //             Manifest.permission.CAMERA)) {
+
+        //         ActivityCompat.requestPermissions(this,
+        //                 new String[]{Manifest.permission.CAMERA},
+        //                 MY_PERMISSIONS_REQUEST_CAMERA);
+
+        //         Log.d(TAG, "requestPermission showing the dialog: ");
+        //     } else {
+
+        //         ActivityCompat.requestPermissions(this,
+        //                 new String[]{Manifest.permission.CAMERA},
+        //                 MY_PERMISSIONS_REQUEST_CAMERA);
+
+        //         Log.d(TAG, "requestPermission: ");
+        //     }
+        // } else {
+        //     isPermissionEnabled = true;
+        // }
+        int currentAPIVersion = Build.VERSION.SDK_INT;
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_MEDIA_IMAGES)
+                != PackageManager.PERMISSION_GRANTED){
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.CAMERA)) {
+                    if (ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED) {
 
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CAMERA},
-                        MY_PERMISSIONS_REQUEST_CAMERA);
-
-                Log.d(TAG, "requestPermission showing the dialog: ");
-            } else {
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CAMERA},
-                        MY_PERMISSIONS_REQUEST_CAMERA);
-
-                Log.d(TAG, "requestPermission: ");
-            }
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.CAMERA},
+                                MY_PERMISSIONS_REQUEST_CAMERA);
+                    }
+                    else{
+                        if (currentAPIVersion >= Build.VERSION_CODES.TIRAMISU){
+                            ActivityCompat.requestPermissions(this,
+                                    new String[] {  Manifest.permission.READ_MEDIA_IMAGES },
+                                    MY_PERMISSIONS_REQUEST_MEDIA);
+                        } else {
+                            ActivityCompat.requestPermissions(this,
+                                    new String[] {  Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                                    MY_PERMISSIONS_REQUEST_STORAGE);
+                        }
+                    }
         } else {
+            Log.e("444 ------>>>> permission enable", String.valueOf(isPermissionEnabled));
             isPermissionEnabled = true;
         }
     }
@@ -560,7 +606,8 @@ public class QRScanActivity extends BaseActivity implements ActionDialogClickLis
         btnBrowse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pickImageFromGallery();
+                openGallery();
+//                pickImageFromGallery();
             }
         });
 
@@ -596,29 +643,36 @@ public class QRScanActivity extends BaseActivity implements ActionDialogClickLis
         dialog.show();
     }
 
-    private void pickImageFromGallery() {
-        Intent  intent = new Intent(QRScanActivity.this, ImagePickerActivity.class);
-        intent.putExtra(Constants.EXTRA_CONFIG, getImagePickerConfig());
-        launchSomeActivity.launch(intent);
+    private void openGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_IMAGE);
     }
 
-    private ImagePickerConfig getImagePickerConfig() {
-        ImagePickerConfig imagePickerConfig = new ImagePickerConfig();
-        imagePickerConfig.setFolderMode(false);
-        imagePickerConfig.setMultipleMode(true);
-        imagePickerConfig.setShowNumberIndicator(true);
-        imagePickerConfig.setAlwaysShowDoneButton(false);
-        imagePickerConfig.setCameraOnly(false);
-        imagePickerConfig.setSelectedImages(imageListData);
-        imagePickerConfig.setStatusBarColor("#0097A7");
-        imagePickerConfig.setToolbarColor("#00BCD4");
-        imagePickerConfig.setProgressIndicatorColor("#00BCD4");
-        //imagePickerConfig.setSelectedIndicatorColor("#00BCD4");
-        imagePickerConfig.setShowCamera(true);
-        imagePickerConfig.setMaxSize(5);
-        return imagePickerConfig;
-
-    }
+//    private void pickImageFromGallery() {
+//        Intent  intent = new Intent(QRScanActivity.this, ImagePickerActivity.class);
+//        intent.putExtra(Constants.EXTRA_CONFIG, getImagePickerConfig());
+//        launchSomeActivity.launch(intent);
+//    }
+//
+//    private ImagePickerConfig getImagePickerConfig() {
+//        ImagePickerConfig imagePickerConfig = new ImagePickerConfig();
+//        imagePickerConfig.setFolderMode(false);
+//        imagePickerConfig.setMultipleMode(true);
+//        imagePickerConfig.setShowNumberIndicator(true);
+//        imagePickerConfig.setAlwaysShowDoneButton(false);
+//        imagePickerConfig.setCameraOnly(false);
+//        imagePickerConfig.setSelectedImages(imageListData);
+//        imagePickerConfig.setStatusBarColor("#0097A7");
+//        imagePickerConfig.setToolbarColor("#00BCD4");
+//        imagePickerConfig.setProgressIndicatorColor("#00BCD4");
+//        //imagePickerConfig.setSelectedIndicatorColor("#00BCD4");
+//        imagePickerConfig.setShowCamera(true);
+//        imagePickerConfig.setMaxSize(5);
+//        return imagePickerConfig;
+//
+//    }
 
     @Override
     public void onItemClick(int position) {
@@ -626,8 +680,6 @@ public class QRScanActivity extends BaseActivity implements ActionDialogClickLis
         imageListData.remove(position);
         if (imageList.size() > 0) {
             quentityImageListAdapter.notifyDataSetChanged();
-            rvImagePreview.setVisibility(View.VISIBLE);
-        } else {
             rvImagePreview.setVisibility(View.GONE);
         }
     }

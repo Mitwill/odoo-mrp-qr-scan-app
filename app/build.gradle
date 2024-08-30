@@ -36,7 +36,7 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "server_url","https://test-eos.mitwilltextiles.com"
-            resValue "string", "server_database_name", "mitwill_test"
+            resValue "string", "server_database_name", "mitwill_test_new_db"
             buildConfigField "String", 'BASE_URL', "\"https://test-eos.mitwilltextiles.com/mrp/\""
         }
         release {
@@ -83,7 +83,8 @@ dependencies {
     // Image picker
    // implementation 'com.opensooq.supernova:gligar:1.1.0'
 
-    implementation 'com.github.nguyenhoanglam:ImagePicker:1.5.1'
+//    implementation 'com.github.nguyenhoanglam:ImagePicker:1.5.1'
+    implementation 'com.github.jkwiecien:EasyImage:1.3.1'
 
 
     // Multidex

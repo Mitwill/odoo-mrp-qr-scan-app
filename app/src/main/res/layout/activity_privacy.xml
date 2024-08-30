@@ -19,8 +19,9 @@
 
 
 
+<!--    android:textColor="@color/imagepicker_black"-->
     <TextView
-        android:textColor="@color/imagepicker_black"
+        android:textColor="@color/android_blue"
         android:gravity="center"
         android:text="Privacy Policy"
         android:textStyle="bold"
