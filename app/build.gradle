@@ -20,7 +20,7 @@ android {
         manifestPlaceholders = [applicationName: "MitWill"]
         applicationId "com.mitwill.mrp"
         minSdkVersion 19
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode appVersionCode.toInteger()
         versionName appVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
