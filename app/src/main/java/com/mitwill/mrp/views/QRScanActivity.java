@@ -684,6 +684,7 @@ public class QRScanActivity extends BaseActivity implements ActionDialogClickLis
         }
     }
 
+    @SuppressWarnings("InvalidSetHasFixedSize")
     private void setRecyclerviewAdapter() {
         quentityImageListAdapter = new QuentityImageListAdapter(QRScanActivity.this, imageList, recyclerViewItemClickListener);
         rvImagePreview.setHasFixedSize(true);

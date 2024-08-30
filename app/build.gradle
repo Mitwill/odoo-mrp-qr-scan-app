@@ -54,6 +54,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.mitwill.mrp'
     android.applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "mitwill-MRP-${variant.name}-V${variant.versionName}.apk"
@@ -77,7 +78,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.2.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     // Image picker

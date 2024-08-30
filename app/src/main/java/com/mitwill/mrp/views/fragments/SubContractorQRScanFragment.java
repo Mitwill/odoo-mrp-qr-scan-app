@@ -538,6 +538,7 @@ public class SubContractorQRScanFragment extends Fragment implements View.OnClic
         }
     }
 
+    @SuppressWarnings("InvalidSetHasFixedSize")
     private void setRecyclerviewAdapter() {
         quentityImageListAdapter = new QuentityImageListAdapter(getActivity(), imageList, recyclerViewItemClickListener);
         rvImagePreview.setHasFixedSize(true);
