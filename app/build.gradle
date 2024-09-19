@@ -29,7 +29,7 @@ android {
     buildTypes {
         debug {
             debuggable true
-            manifestPlaceholders = [applicationName: "Test MRP Mitwill"]
+            manifestPlaceholders = [applicationName: "Test MRP Mitwill",sentryEnvironment: "debug",sentryDebug: "true"]
             signingConfig signingConfigs.config
             applicationIdSuffix ".debug"
             minifyEnabled false
@@ -40,7 +40,7 @@ android {
             buildConfigField "String", 'BASE_URL', "\"https://test-eos.mitwilltextiles.com/mrp/\""
         }
         release {
-            manifestPlaceholders = [applicationName: "MRP Mitwill"]
+            manifestPlaceholders = [applicationName: "MRP Mitwill",sentryEnvironment: "release",sentryDebug: "false"]
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -121,5 +121,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+
+
+    //sentry-android for tracking
+    implementation 'io.sentry:sentry-android:6.8.0'
 
 }
