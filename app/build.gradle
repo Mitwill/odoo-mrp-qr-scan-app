@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
-apply from: 'https://gist.githubusercontent.com/IlyaEremin/8821fbf0069e8e60dfeaeefc19afaca2/raw/ce54be4ea6f19b9609f303cd75714d6ec8d916e5/app_version.gradle'
 // Add the Firebase Crashlytics plugin.
 apply plugin: 'com.google.firebase.crashlytics'
 android {
@@ -12,7 +11,7 @@ android {
             storePassword 'android'
         }
     }
-    compileSdkVersion 33
+    compileSdkVersion 34
     buildToolsVersion "33.0.2"
     defaultConfig {
         multiDexEnabled true
@@ -35,9 +34,12 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", "server_url","https://test-eos.mitwilltextiles.com"
-            resValue "string", "server_database_name", "mitwill_test_new_db"
-            buildConfigField "String", 'BASE_URL', "\"https://test-eos.mitwilltextiles.com/mrp/\""
+//            resValue "string", "server_url","https://test-eos.mitwilltextiles.com"
+//            resValue "string", "server_database_name", "mitwill_test_new_db"
+//            buildConfigField "String", 'BASE_URL', "\"https://test-eos.mitwilltextiles.com/mrp/\""
+            resValue "string", "server_url","https://test-eos.mitwill.com"
+            resValue "string", "server_database_name", "mitwill_prod_copy"
+            buildConfigField "String", 'BASE_URL', "\"https://test-eos.mitwill.com/mrp/\""
         }
         release {
             manifestPlaceholders = [applicationName: "MRP Mitwill",sentryEnvironment: "release",sentryDebug: "false"]
